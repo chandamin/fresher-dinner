@@ -8,12 +8,6 @@ export const action = async ({ request }) => {
   console.log("ORDER PAID WEBHOOK DATA:");
   console.log(payload);
 
-  return json({ success: true });
-  
-//   console.log("Webhook data:", payload);
-
-//   return json({ ok: true });
-
   const shopifyCustomerId = payload.customer?.id?.toString();
   const email = payload.customer?.email;
   const amount = parseFloat(payload.total_price);
@@ -22,13 +16,14 @@ export const action = async ({ request }) => {
     return json({ ok: false });
   }
 
-  // check customer
+  // Check customer
   let customer = await prisma.customer.findUnique({
     where: { shopifyCustomerId }
   });
 
   if (!customer) {
 
+    // Create customer + wallet
     customer = await prisma.customer.create({
       data: {
         shopifyCustomerId,
@@ -43,6 +38,7 @@ export const action = async ({ request }) => {
 
   } else {
 
+    // Update wallet balance
     await prisma.wallet.update({
       where: { customerId: customer.id },
       data: {
@@ -54,10 +50,12 @@ export const action = async ({ request }) => {
 
   }
 
+  // Get wallet
   const wallet = await prisma.wallet.findUnique({
     where: { customerId: customer.id }
   });
 
+  // Create transaction
   await prisma.transaction.create({
     data: {
       amount,
@@ -68,4 +66,5 @@ export const action = async ({ request }) => {
   });
 
   return json({ success: true });
+
 };
