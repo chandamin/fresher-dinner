@@ -32,3 +32,39 @@ model Session {
   refreshToken        String?
   refreshTokenExpires DateTime?
 }
+
+model Customer {
+  id               String        @id @default(cuid())
+  shopifyCustomerId String       @unique
+  email            String
+  createdAt        DateTime      @default(now())
+  wallet           Wallet?
+  orders           MenuOrder[]
+}
+
+model Wallet {
+  id          String     @id @default(cuid())
+  balance     Float      @default(0)
+  customer    Customer   @relation(fields: [customerId], references: [id])
+  customerId  String     @unique
+  transactions Transaction[]
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  amount      Float
+  type        String   // "CREDIT" or "DEBIT"
+  description String
+  createdAt   DateTime @default(now())
+  wallet      Wallet   @relation(fields: [walletId], references: [id])
+  walletId    String
+}
+
+model MenuOrder {
+  id          String   @id @default(cuid())
+  itemName    String
+  price       Float
+  createdAt   DateTime @default(now())
+  customer    Customer @relation(fields: [customerId], references: [id])
+  customerId  String
+}
