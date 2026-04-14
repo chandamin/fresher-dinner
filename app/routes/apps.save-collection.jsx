@@ -15,7 +15,7 @@ export const action = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          message: "collectionId or customerId missing",
+          message: "Please log in to continue.",
         }),
         { status: 400 }
       );
