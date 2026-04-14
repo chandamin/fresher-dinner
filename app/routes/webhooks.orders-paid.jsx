@@ -4,18 +4,18 @@ export const action = async ({ request }) => {
   try {
     const body = await request.json();
 
-    console.log("🔥 SAVE REQUEST:", body);
+    console.log("🔥 SAVE COLLECTION REQUEST:", body);
 
     const { collectionId, customerId } = body;
 
-    // =========================
+    // ============================
     // 1. VALIDATION
-    // =========================
+    // ============================
     if (!collectionId || !customerId) {
       return new Response(
         JSON.stringify({
           success: false,
-          message: "collectionId or customerId missing",
+          message: "Missing collectionId or customerId",
         }),
         { status: 400 }
       );
@@ -24,9 +24,9 @@ export const action = async ({ request }) => {
     const shopifyCustomerId = String(customerId);
     const collection = String(collectionId);
 
-    // =========================
-    // 2. FIND CUSTOMER (OR CREATE)
-    // =========================
+    // ============================
+    // 2. FIND OR CREATE CUSTOMER
+    // ============================
     let customer = await db.customer.findUnique({
       where: {
         shopifyCustomerId,
@@ -42,11 +42,11 @@ export const action = async ({ request }) => {
       });
     }
 
-    console.log("✅ CUSTOMER READY:", customer.id);
+    console.log("✅ Customer ready:", customer.id);
 
-    // =========================
-    // 3. SAVE COLLECTION (YOUR SCHEMA FIX)
-    // =========================
+    // ============================
+    // 3. SAVE COLLECTION (UPSERT)
+    // ============================
     const savedCollection = await db.savedCollection.upsert({
       where: {
         customerId_collectionId: {
@@ -61,21 +61,15 @@ export const action = async ({ request }) => {
       },
     });
 
-    console.log("🎯 SAVED:", savedCollection.id);
+    console.log("🎯 COLLECTION SAVED:", savedCollection.id);
 
-    // =========================
-    // 4. RESPONSE
-    // =========================
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Collection saved in DB",
+        message: "Collection saved successfully",
         data: savedCollection,
       }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
+      { status: 200 }
     );
 
   } catch (error) {
@@ -86,10 +80,7 @@ export const action = async ({ request }) => {
         success: false,
         message: error.message,
       }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
+      { status: 500 }
     );
   }
 };

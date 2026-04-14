@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "0f621c8eef5a04a292370b0e6be5a49e"
-name = "fresher-dinner"
+client_id = "811fa4e3c82a3aaa90b8db867a5d132c"
+name = "Credit System"
 application_url = "https://example.com"
 embedded = true
 
@@ -12,21 +12,16 @@ automatically_update_urls_on_dev = true
 api_version = "2026-07"
 
   [[webhooks.subscriptions]]
-  topics = [ "app/scopes_update" ]
-  uri = "/webhooks/app/scopes_update"
-
-  [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
   uri = "/webhooks/app/uninstalled"
 
   [[webhooks.subscriptions]]
-  topics = ["orders/paid"]
-  uri = "https://lucy-valuable-under-protection.trycloudflare.com/webhooks/order-paid"
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_orders,write_products,write_metaobjects,write_metaobject_definitions"
-
+scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_orders"
 
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]
@@ -55,7 +50,14 @@ required = true
 name = "Description"
 type = "multi_line_text_field"
 
+[[webhooks.subscriptions]]
+topics = ["orders/paid"]
+uri = "https://firewall-automobiles-bone-zoning.trycloudflare.com/webhooks/orders-paid"
+
+
+
 [app_proxy]
-url = "https://lucy-valuable-under-protection.trycloudflare.com/apps/save-collection" 
+url = "https://firewall-automobiles-bone-zoning.trycloudflare.com/apps/save-collection" 
 prefix = "apps"                                   
-subpath = "save-collection"      
+subpath = "save-collection"                 
+
