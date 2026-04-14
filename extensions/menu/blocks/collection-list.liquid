@@ -1,0 +1,52 @@
+
+<div class="collection-grid">
+
+  {% if block.settings.collections != blank %}
+
+    {% for collection in block.settings.collections %}
+
+      <div class="collection-card">
+
+        <a href="{{ collection.url }}">
+          {% if collection.image %}
+            <img src="{{ collection.image | image_url: width: 500 }}">
+          {% endif %}
+          <h3>{{ collection.title }}</h3>
+        </a>
+
+        <div class="actions">
+
+          <a href="{{ collection.url }}" class="view-btn">
+            View All
+          </a>
+
+          <!-- SAVE BUTTON -->
+          <button class="save-btn" data-id="{{ collection.id }}" data-customer-id="{{ customer.id }}">
+            Save 
+          </button>
+
+        </div>
+
+      </div>
+
+    {% endfor %}
+
+  {% endif %}
+
+</div>
+<script src="{{ 'collection.js' | asset_url }}" defer></script>
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+{% schema %}
+{
+  "name": "Collections Grid",
+  "target": "section",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Select Collections",
+      "limit": 8
+    }
+  ]
+}
+{% endschema %}

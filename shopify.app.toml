@@ -21,7 +21,7 @@ api_version = "2026-07"
 
   [[webhooks.subscriptions]]
   topics = ["orders/paid"]
-  uri = "https://jazz-hypothesis-intro-rapids.trycloudflare.com/webhooks/order-paid"
+  uri = "https://lucy-valuable-under-protection.trycloudflare.com/webhooks/order-paid"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -54,3 +54,8 @@ required = true
 [metaobjects.app.example.fields.description]
 name = "Description"
 type = "multi_line_text_field"
+
+[app_proxy]
+url = "https://lucy-valuable-under-protection.trycloudflare.com/apps/save-collection" 
+prefix = "apps"                                   
+subpath = "save-collection"      
