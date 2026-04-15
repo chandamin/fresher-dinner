@@ -1,5 +1,11 @@
 import db from "../db.server";
 
+// 👇 ADD THIS
+export const loader = async () => {
+  return new Response("OK");
+};
+
+
 export const action = async ({ request }) => {
   try {
     const body = await request.json();
@@ -15,7 +21,7 @@ export const action = async ({ request }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          message: "Please log in to continue.",
+          message: "collectionId or customerId missing",
         }),
         { status: 400 }
       );
