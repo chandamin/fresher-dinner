@@ -1,7 +1,7 @@
 import prisma from "../db.server";
 
 export const action = async ({ request }) => {
-  console.log("🔥 Webhook HIT hua");
+  console.log("🔥 Webhook HIT");
 
   // 🔹 STEP 1: Get raw body (safe way)
   let rawBody;
@@ -75,6 +75,47 @@ export const action = async ({ request }) => {
         }
       });
     }
+
+    // 🔹 STEP 6: GET THE OREDRE DATA SELLING PRICE AND PLAN etc..
+
+
+    const SEAL_API_URL = `https://app.sealsubscriptions.com/shopify/merchant/api/subscriptions?query=${email}`;
+    const sealResponse = await fetch(SEAL_API_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Seal-Token": 'seal_token_0ct6f5ziql9i7kg3z7f7pev1d9o22gvorxuez4s9'
+      }
+    });
+    const sealData = await sealResponse.json();
+    console.log("****************SEAL API RESPONSE:****************", sealData);
+
+    const subscriptions = sealData?.payload?.subscriptions || [];
+
+    let finalData = [];
+
+    subscriptions.forEach(sub => {
+      if (sub.items && Array.isArray(sub.items)) {
+        sub.items.forEach(item => {
+          finalData.push({
+            title: item.title,
+            quantity: item.quantity,
+            selling_plan_id: item.selling_plan_id,
+            selling_plan_name: item.selling_plan_name,
+            total_value: sub.total_value
+          });
+        });
+      }
+    });
+
+    console.log("******** FINAL DATA:*********", finalData);
+
+
+
+
+
+
+
 
     // 🔹 STEP 6: Get wallet
     const wallet = await prisma.wallet.findUnique({

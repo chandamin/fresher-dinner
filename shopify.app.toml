@@ -2,7 +2,7 @@
 
 client_id = "811fa4e3c82a3aaa90b8db867a5d132c"
 name = "Credit System"
-application_url = "https://example.com"
+application_url = "https://match-usd-expiration-addresses.trycloudflare.com"
 embedded = true
 
 [build]
@@ -24,7 +24,9 @@ uri = "/webhooks/app/scopes_update"
 scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_products,read_customers,read_orders"
 
 [auth]
-redirect_urls = ["https://example.com/api/auth"]
+redirect_urls = [
+    "https://match-usd-expiration-addresses.trycloudflare.com/api/auth",
+]
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
@@ -52,10 +54,10 @@ type = "multi_line_text_field"
 
 [[webhooks.subscriptions]]
 topics = ["orders/paid"]
-uri = "https://hearts-negotiations-integration-brisbane.trycloudflare.com/webhooks/orders-paid"
+uri = "https://match-usd-expiration-addresses.trycloudflare.com/webhooks/orders-paid"
 
 
 [app_proxy]
-url = "https://hearts-negotiations-integration-brisbane.trycloudflare.com/apps/save-collection"
+url = "https://match-usd-expiration-addresses.trycloudflare.com/apps/save-collection"
 prefix = "apps"
 subpath = "save-collection"
