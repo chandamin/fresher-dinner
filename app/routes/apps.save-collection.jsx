@@ -12,7 +12,7 @@ export const action = async ({ request }) => {
 
     console.log("🔥 SAVE REQUEST:", body);
 
-    const { collectionId, customerId } = body;
+    const { collectionId, customerId, collectionTitle, customerName } = body;
 
     // =========================
     // 1. VALIDATION
@@ -44,7 +44,13 @@ export const action = async ({ request }) => {
         data: {
           shopifyCustomerId,
           email: "",
+          name: customerName || "Unknown",
         },
+      });
+    } else if (customerName && customer.name !== customerName) {
+      customer = await db.customer.update({
+        where: { shopifyCustomerId },
+        data: { name: customerName },
       });
     }
 
@@ -60,10 +66,13 @@ export const action = async ({ request }) => {
           collectionId: collection,
         },
       },
-      update: {},
+      update: {
+        collectionTitle: collectionTitle || "Unknown",
+      },
       create: {
         customerId: customer.id,
         collectionId: collection,
+        collectionTitle: collectionTitle || "Unknown",
       },
     });
 

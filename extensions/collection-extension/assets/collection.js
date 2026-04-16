@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".save-btn").forEach((btn) => {
     btn.addEventListener("click", async function () {
       const collectionId = this.dataset.id;
+      const collectionTitle = this.dataset.title;
       const customerId = this.dataset.customerId;
+      const customerName = this.dataset.customerName;
 
       try {
         const res = await fetch("/apps/save-collection", {
@@ -12,7 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
           },
           body: JSON.stringify({
             collectionId,
+            collectionTitle,
             customerId,
+            customerName
           }),
         });
 

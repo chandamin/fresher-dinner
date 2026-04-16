@@ -37,18 +37,18 @@ export default function CustomersPage() {
 
   const rows = customers.map((customer) => [
     customer.id.slice(0, 20) + "...",
-    customer.shopifyCustomerId,
+    customer.name || customer.shopifyCustomerId,
     customer.email || "N/A",
     customer.createdAt, // ✅ plain string, no formatting needed
     <Badge tone="info">{String(customer.orders?.length || 0)}</Badge>,
     customer.savedCollections?.length ? (
       customer.savedCollections.map((col) => (
         <Link key={col.id} url={`/collection/${col.collectionId}`}>
-          {col.collectionId}
+          {col.collectionTitle || col.collectionId}
         </Link>
       ))
     ) : (
-      <Badge tone="warning">No Collections</Badge>
+      <Badge tone="warning">No Menu</Badge>
     ),
   ]);
 
@@ -72,7 +72,7 @@ export default function CustomersPage() {
         ) : (
           <DataTable
             columnContentTypes={["text", "text", "text", "text", "text", "text"]}
-            headings={["ID", "Shopify Customer ID", "Email", "Created At", "Orders", "Collections"]}
+            headings={["ID", "Name", "Email", "Created At", "Orders", "Menu"]}
             rows={rows}
           />
         )}

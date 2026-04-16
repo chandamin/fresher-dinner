@@ -31,6 +31,7 @@ model Customer {
   id                String           @id @default(cuid())
   shopifyCustomerId String           @unique
   email             String
+  name              String?
   createdAt         DateTime         @default(now())
 
   wallet            Wallet?
@@ -77,6 +78,7 @@ model SavedCollection {
   customerId    String
 
   collectionId  String
+  collectionTitle String?
   createdAt     DateTime @default(now())
 
   @@unique([customerId, collectionId])
