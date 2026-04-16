@@ -1,86 +1,113 @@
-import db from "../db.server";
+import prisma from "../db.server";
 
 export const action = async ({ request }) => {
+  console.log("🔥 Webhook HIT hua");
+
+  // 🔹 STEP 1: Get raw body (safe way)
+  let rawBody;
   try {
-    const body = await request.json();
+    rawBody = await request.text();
+    console.log("📦 RAW BODY:", rawBody);
+  } catch (err) {
+    console.error("❌ Error reading body:", err);
+    return new Response("Invalid body", { status: 400 });
+  }
 
-    console.log("🔥 SAVE COLLECTION REQUEST:", body);
+  // 🔹 STEP 2: Parse JSON safely
+  let payload;
+  try {
+    payload = JSON.parse(rawBody);
+  } catch (err) {
+    console.error("❌ JSON Parse Error:", err);
+    return new Response("Invalid JSON", { status: 400 });
+  }
 
-    const { collectionId, customerId } = body;
+  console.log("✅ Parsed Payload:", payload);
 
-    // ============================
-    // 1. VALIDATION
-    // ============================
-    if (!collectionId || !customerId) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "Missing collectionId or customerId",
-        }),
-        { status: 400 }
-      );
-    }
+  // 🔹 STEP 3: Extract data
+  const shopifyCustomerId = payload.customer?.id?.toString();
+  const email = payload.customer?.email || null;
+  const amount = parseFloat(payload.total_price || 0);
 
-    const shopifyCustomerId = String(customerId);
-    const collection = String(collectionId);
+  console.log("👤 Customer ID:", shopifyCustomerId);
+  console.log("📧 Email:", email);
+  console.log("💰 Amount:", amount);
 
-    // ============================
-    // 2. FIND OR CREATE CUSTOMER
-    // ============================
-    let customer = await db.customer.findUnique({
-      where: {
-        shopifyCustomerId,
-      },
+  if (!shopifyCustomerId) {
+    console.error("❌ Customer ID missing");
+    return new Response(
+      JSON.stringify({ ok: false, message: "Customer ID missing" }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
+  try {
+    // 🔹 STEP 4: Check customer
+    let customer = await prisma.customer.findUnique({
+      where: { shopifyCustomerId }
     });
 
+    // 🔹 STEP 5: Create or Update
     if (!customer) {
-      customer = await db.customer.create({
+      console.log("🆕 Creating new customer + wallet");
+
+      customer = await prisma.customer.create({
         data: {
           shopifyCustomerId,
-          email: "",
+          email,
+          wallet: {
+            create: {
+              balance: amount
+            }
+          }
         },
+        include: { wallet: true }
+      });
+    } else {
+      console.log("🔄 Existing customer, updating wallet");
+
+      await prisma.wallet.update({
+        where: { customerId: customer.id },
+        data: {
+          balance: {
+            increment: amount
+          }
+        }
       });
     }
 
-    console.log("✅ Customer ready:", customer.id);
-
-    // ============================
-    // 3. SAVE COLLECTION (UPSERT)
-    // ============================
-    const savedCollection = await db.savedCollection.upsert({
-      where: {
-        customerId_collectionId: {
-          customerId: customer.id,
-          collectionId: collection,
-        },
-      },
-      update: {},
-      create: {
-        customerId: customer.id,
-        collectionId: collection,
-      },
+    // 🔹 STEP 6: Get wallet
+    const wallet = await prisma.wallet.findUnique({
+      where: { customerId: customer.id }
     });
 
-    console.log("🎯 COLLECTION SAVED:", savedCollection.id);
+    if (!wallet) {
+      throw new Error("Wallet not found");
+    }
+
+    // 🔹 STEP 7: Create transaction
+    await prisma.transaction.create({
+      data: {
+        amount,
+        type: "CREDIT",
+        description: "Subscription purchase",
+        walletId: wallet.id
+      }
+    });
+
+    console.log("✅ Transaction created successfully");
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Collection saved successfully",
-        data: savedCollection,
-      }),
-      { status: 200 }
+      JSON.stringify({ success: true }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
     );
 
   } catch (error) {
-    console.error("❌ SAVE COLLECTION ERROR:", error);
+    console.error("❌ SERVER ERROR:", error);
 
     return new Response(
-      JSON.stringify({
-        success: false,
-        message: error.message,
-      }),
-      { status: 500 }
+      JSON.stringify({ success: false, error: error.message }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 };

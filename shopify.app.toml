@@ -11,35 +11,35 @@ automatically_update_urls_on_dev = true
 [webhooks]
 api_version = "2026-07"
 
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
+[[webhooks.subscriptions]]
+topics = ["app/uninstalled"]
+uri = "/webhooks/app/uninstalled"
 
-  [[webhooks.subscriptions]]
-  topics = [ "app/scopes_update" ]
-  uri = "/webhooks/app/scopes_update"
+[[webhooks.subscriptions]]
+topics = ["app/scopes_update"]
+uri = "/webhooks/app/scopes_update"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_products,read_customers,read_orders"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = ["https://example.com/api/auth"]
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
 name = "Demo Source Info"
 description = "Tracks products created by the Shopify app template for development"
 
-  [product.metafields.app.demo_info.access]
-  admin = "merchant_read_write"
+[product.metafields.app.demo_info.access]
+admin = "merchant_read_write"
 
 [metaobjects.app.example]
 name = "Example"
 description = "An example metaobject definition created by this template"
 
-  [metaobjects.app.example.access]
-  admin = "merchant_read_write"
+[metaobjects.app.example.access]
+admin = "merchant_read_write"
 
 [metaobjects.app.example.fields.title]
 name = "Title"
@@ -52,12 +52,10 @@ type = "multi_line_text_field"
 
 [[webhooks.subscriptions]]
 topics = ["orders/paid"]
-uri = "https://reed-breath-celebration-dos.trycloudflare.com/webhooks/orders-paid"
-
+uri = "https://hearts-negotiations-integration-brisbane.trycloudflare.com/webhooks/orders-paid"
 
 
 [app_proxy]
-url = "https://reed-breath-celebration-dos.trycloudflare.com/apps/save-collection" 
-prefix = "apps"                                   
-subpath = "save-collection"                 
-
+url = "https://hearts-negotiations-integration-brisbane.trycloudflare.com/apps/save-collection"
+prefix = "apps"
+subpath = "save-collection"
