@@ -76,9 +76,8 @@ export const action = async ({ request }) => {
       });
     }
 
+
     // 🔹 STEP 6: GET THE OREDRE DATA SELLING PRICE AND PLAN etc..
-
-
     const SEAL_API_URL = `https://app.sealsubscriptions.com/shopify/merchant/api/subscriptions?query=${email}`;
     const sealResponse = await fetch(SEAL_API_URL, {
       method: "GET",
@@ -108,6 +107,28 @@ export const action = async ({ request }) => {
       }
     });
 
+    console.log("******** FINAL DATA:*********", finalData);
+
+    // ✅ SAVE SELLING PLAN DATA
+    if (finalData.length > 0) {
+      await prisma.sellingPlanOrder.createMany({
+        data: finalData.map(item => ({
+          customerId: customer.id,
+          shopifyCustomerId: shopifyCustomerId,
+
+          title: item.title,
+          quantity: item.quantity,
+
+          //  mapping fix (snake → camel)
+          sellingPlanId: item.selling_plan_id?.toString() || "",
+          sellingPlanName: item.selling_plan_name || null,
+
+          totalValue: parseFloat(item.total_value || 0),
+        }))
+      });
+
+      console.log("✅ Selling plan data saved in DB");
+    }
     console.log("******** FINAL DATA:*********", finalData);
 
 

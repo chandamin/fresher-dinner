@@ -8,44 +8,46 @@ datasource db {
 }
 
 model Session {
-  id            String    @id
-  shop          String
-  state         String
-  isOnline      Boolean   @default(false)
-  scope         String?
-  expires       DateTime?
-  accessToken   String
-  userId        BigInt?
-  firstName     String?
-  lastName      String?
-  email         String?
-  accountOwner  Boolean   @default(false)
-  locale        String?
-  collaborator  Boolean?  @default(false)
-  emailVerified Boolean?  @default(false)
+  id                  String    @id
+  shop                String
+  state               String
+  isOnline            Boolean   @default(false)
+  scope               String?
+  expires             DateTime?
+  accessToken         String
+  userId              BigInt?
+  firstName           String?
+  lastName            String?
+  email               String?
+  accountOwner        Boolean   @default(false)
+  locale              String?
+  collaborator        Boolean?  @default(false)
+  emailVerified       Boolean?  @default(false)
   refreshToken        String?
   refreshTokenExpires DateTime?
 }
 
 model Customer {
-  id                String           @id @default(cuid())
-  shopifyCustomerId String           @unique
+  id                String   @id @default(cuid())
+  shopifyCustomerId String   @unique
   email             String
   name              String?
-  createdAt         DateTime         @default(now())
+  createdAt         DateTime @default(now())
 
-  wallet            Wallet?
-  orders            MenuOrder[]
+  wallet Wallet?
+  orders MenuOrder[]
 
-  savedCollections  SavedCollection[]
+  savedCollections SavedCollection[]
+
+  sellingPlanOrders SellingPlanOrder[]
 }
 
 model Wallet {
-  id          String     @id @default(cuid())
-  balance     Float      @default(0)
+  id      String @id @default(cuid())
+  balance Float  @default(0)
 
-  customer    Customer   @relation(fields: [customerId], references: [id])
-  customerId  String     @unique
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String   @unique
 
   transactions Transaction[]
 }
@@ -57,29 +59,47 @@ model Transaction {
   description String
   createdAt   DateTime @default(now())
 
-  wallet      Wallet @relation(fields: [walletId], references: [id])
-  walletId    String
+  wallet   Wallet @relation(fields: [walletId], references: [id])
+  walletId String
 }
 
 model MenuOrder {
-  id          String   @id @default(cuid())
-  itemName    String
-  price       Float
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  itemName  String
+  price     Float
+  createdAt DateTime @default(now())
 
-  customer    Customer @relation(fields: [customerId], references: [id])
-  customerId  String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
+}
+
+model SellingPlanOrder {
+  id String @id @default(cuid())
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
+
+  shopifyCustomerId String
+
+  title           String
+  quantity        Int
+  sellingPlanId   String
+  sellingPlanName String?
+  totalValue      Float
+
+  createdAt DateTime @default(now())
 }
 
 model SavedCollection {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  customer      Customer @relation(fields: [customerId], references: [id])
-  customerId    String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
 
-  collectionId  String
+  collectionId    String
   collectionTitle String?
-  createdAt     DateTime @default(now())
+  products        Json?   //  ADD THIS
+  createdAt       DateTime @default(now())
 
   @@unique([customerId, collectionId])
 }

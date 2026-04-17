@@ -21,6 +21,41 @@
     {% endfor %}
   {% endif %}
 </div>
+
+
+<div id="collectionModal" class="modal hidden">
+  <div class="modal-card">
+
+    <!-- HEADER -->
+    <div class="modal-header">
+      <h2 id="modalTitle"></h2>
+      <button class="close-modal">✕</button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="modal-search">
+      <input type="text" id="searchProduct" placeholder="Search products..." />
+    </div>
+
+    <!-- BODY -->
+    <div id="productList" class="modal-body"></div>
+
+    <!-- FOOTER -->
+    <div class="modal-footer">
+      <span id="selectedCount">0 selected</span>
+      <span class="totalproceall">Total Price : </span>
+      <div>
+        <button class="btn secondary close-modal">Cancel</button>
+        <button id="confirmSelection" class="btn primary">Save Selected</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
 <script src="{{ 'collection.js' | asset_url }}" defer></script>
 {{ 'collection.css' | asset_url | stylesheet_tag }}
 {% schema %}

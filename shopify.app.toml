@@ -2,7 +2,7 @@
 
 client_id = "811fa4e3c82a3aaa90b8db867a5d132c"
 name = "Credit System"
-application_url = "https://match-usd-expiration-addresses.trycloudflare.com"
+application_url = "https://intensity-twin-reno-selected.trycloudflare.com"
 embedded = true
 
 [build]
@@ -12,21 +12,32 @@ automatically_update_urls_on_dev = true
 api_version = "2026-07"
 
 [[webhooks.subscriptions]]
-topics = ["app/uninstalled"]
-uri = "/webhooks/app/uninstalled"
+topics = ["app/scopes_update"]
+uri = "https://circuit-passengers-membership-blogging.trycloudflare.com/webhooks/app/scopes_update"
 
 [[webhooks.subscriptions]]
-topics = ["app/scopes_update"]
-uri = "/webhooks/app/scopes_update"
+topics = ["orders/paid"]
+uri = "https://intensity-twin-reno-selected.trycloudflare.com/webhooks/orders-paid"
+
+[[webhooks.subscriptions]]
+topics = ["app/uninstalled"]
+uri = "https://intensity-twin-reno-selected.trycloudflare.com/webhooks/app/uninstalled"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_products,read_customers,read_orders"
+scopes = "read_customers,write_metaobject_definitions,write_metaobjects,read_orders,read_products,write_products"
+optional_scopes = []
+use_legacy_install_flow = false
 
 [auth]
 redirect_urls = [
-    "https://match-usd-expiration-addresses.trycloudflare.com/api/auth",
+    "https://intensity-twin-reno-selected.trycloudflare.com/api/auth",
 ]
+
+[app_proxy]
+url = "https://intensity-twin-reno-selected.trycloudflare.com/apps/save-collection"
+subpath = "save-collection"
+prefix = "apps"
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
@@ -51,13 +62,3 @@ required = true
 [metaobjects.app.example.fields.description]
 name = "Description"
 type = "multi_line_text_field"
-
-[[webhooks.subscriptions]]
-topics = ["orders/paid"]
-uri = "https://match-usd-expiration-addresses.trycloudflare.com/webhooks/orders-paid"
-
-
-[app_proxy]
-url = "https://match-usd-expiration-addresses.trycloudflare.com/apps/save-collection"
-prefix = "apps"
-subpath = "save-collection"
