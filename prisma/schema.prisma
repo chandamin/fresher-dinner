@@ -73,21 +73,22 @@ model MenuOrder {
   customerId String
 }
 
-model SellingPlanOrder {
-  id String @id @default(cuid())
+  model SellingPlanOrder {
+    id String @id @default(cuid())
+    
+    customer   Customer @relation(fields: [customerId], references: [id])
+    customerId String
 
-  customer   Customer @relation(fields: [customerId], references: [id])
-  customerId String
+    shopifyCustomerId String
+    email String?
+    title           String
+    quantity        Int
+    pax Int @default(1)
+    sellingPlanId   String
+    sellingPlanName String?
+    totalValue      Float
 
-  shopifyCustomerId String
-
-  title           String
-  quantity        Int
-  sellingPlanId   String
-  sellingPlanName String?
-  totalValue      Float
-
-  createdAt DateTime @default(now())
+    createdAt DateTime @default(now())
 }
 
 model SavedCollection {
@@ -99,7 +100,14 @@ model SavedCollection {
   collectionId    String
   collectionTitle String?
   products        Json?   //  ADD THIS
+  persons     Int @default(2)
   createdAt       DateTime @default(now())
 
   @@unique([customerId, collectionId])
 }
+
+model ProcessedWebhook { 
+  id String @id @default(cuid())
+  webhookId String @unique
+  createdAt DateTime @default(now()) 
+  }

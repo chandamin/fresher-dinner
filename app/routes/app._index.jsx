@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { useLoaderData } from "react-router";
+import { useLoaderData, Link } from "react-router";
 import db from "../db.server";
 import {
   Page,
@@ -7,7 +7,6 @@ import {
   DataTable,
   EmptyState,
   Badge,
-  Link,
   Button,
 } from "@shopify/polaris";
 import { PlusIcon } from "@shopify/polaris-icons";
@@ -35,11 +34,11 @@ export const loader = async ({ request }) => {
 export default function CustomersPage() {
   const { customers } = useLoaderData();
 
-  const rows = customers.map((customer) => [
-    customer.id.slice(0, 20) + "...",
-    customer.name || customer.shopifyCustomerId,
+  const rows = customers.map((customer, index) => [
+    index + 1,
     customer.email || "N/A",
-    customer.createdAt, // ✅ plain string, no formatting needed
+    customer.wallet?.balance || 0,
+    customer.createdAt,
     <Badge tone="info">{String(customer.orders?.length || 0)}</Badge>,
     customer.savedCollections?.length ? (
       customer.savedCollections.map((col) => (
@@ -72,7 +71,7 @@ export default function CustomersPage() {
         ) : (
           <DataTable
             columnContentTypes={["text", "text", "text", "text", "text", "text"]}
-            headings={["ID", "Name", "Email", "Created At", "Orders", "Menu"]}
+            headings={["ID", "Email", "Credit", "Created At", "Orders", "Menu"]}
             rows={rows}
           />
         )}

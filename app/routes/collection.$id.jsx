@@ -6,28 +6,31 @@ export const loader = async ({ params }) => {
 
   const collections = await db.savedCollection.findMany({
     where: {
-      collectionId: params.collectionId
+      collectionId: params.id
     }
   });
 
   return json({ collections });
 };
 
-export default function CollectionProducts() {
+// UI
 
-  const { collections } = useLoaderData();
+export default function CollectionProducts() {
+  const { collection } = useLoaderData();
+
+  const products = collection?.products || [];
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Collection ID: {collections[0]?.collectionId}</h2>
+      <h2>Collection: {collection?.collectionTitle}</h2>
 
-      {collections.length === 0 ? (
+      {products.length === 0 ? (
         <p>No products found</p>
       ) : (
         <ul>
-          {collections.map((item) => (
-            <li key={item.id}>
-              {item.productTitle}
+          {products.map((item, index) => (
+            <li key={index}>
+              Product ID: {item.productId} | Qty: {item.quantity}
             </li>
           ))}
         </ul>

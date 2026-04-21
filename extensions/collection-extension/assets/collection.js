@@ -95,11 +95,20 @@ function updateCount() {
   document.getElementById("selectedCount").innerText = `${count} selected`;
 }
 
-let maxSelection = 0;
 document.addEventListener("change", (e) => {
   if (e.target.classList.contains("product-check")) {
+    const row = e.target.closest(".product-row");
+    const qtyEl = row.querySelector(".qty");
+
+    if (e.target.checked) {
+      qtyEl.innerText = 2; // ✅ set default 2 when selected
+    } else {
+      qtyEl.innerText = 1; // optional reset
+    }
+
+    updateRowPrice(row);
     updateCount();
-    updateTotalPrice(); // ✅ ADD THIS
+    updateTotalPrice();
   }
 });
 
@@ -191,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (index < maxSelection) {
             checkbox.checked = true;
-            qtyEl.innerText = 1;
+            qtyEl.innerText = 2; // ✅ default 2
           } else {
             checkbox.checked = false;
             qtyEl.innerText = 1;
