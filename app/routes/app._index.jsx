@@ -1,7 +1,22 @@
 import { json } from "@remix-run/node";
 import { useLoaderData } from "react-router";
+<<<<<<< HEAD
 import db from "../db.server";
 import { Page, Layout, Card, Text, BlockStack, InlineGrid, Grid } from "@shopify/polaris";
+=======
+// import AppTabs from "../components/Tabs";
+import db from "../db.server";
+import {
+  Page,
+  Card,
+  DataTable,
+  EmptyState,
+  Badge,
+  Link,
+  Button,
+} from "@shopify/polaris";
+import { PlusIcon } from "@shopify/polaris-icons";
+>>>>>>> fix-wallet-update
 
 export const loader = async () => {
   // Mock implementations for dashboard counts
