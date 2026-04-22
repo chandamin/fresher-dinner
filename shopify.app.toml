@@ -2,7 +2,7 @@
 
 client_id = "811fa4e3c82a3aaa90b8db867a5d132c"
 name = "Credit System"
-application_url = "https://retired-hockey-move-pairs.trycloudflare.com"
+application_url = "https://authorization-marketplace-elizabeth-western.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,15 +13,15 @@ api_version = "2026-07"
 
 [[webhooks.subscriptions]]
 topics = ["app/scopes_update"]
-uri = "https://retired-hockey-move-pairs.trycloudflare.com/webhooks/app/scopes_update"
+uri = "https://authorization-marketplace-elizabeth-western.trycloudflare.com/webhooks/app/scopes_update"
 
 [[webhooks.subscriptions]]
 topics = ["orders/paid"]
-uri = "https://retired-hockey-move-pairs.trycloudflare.com/webhooks/orders-paid"
+uri = "https://authorization-marketplace-elizabeth-western.trycloudflare.com/webhooks/orders-paid"
 
 [[webhooks.subscriptions]]
 topics = ["app/uninstalled"]
-uri = "https://retired-hockey-move-pairs.trycloudflare.com/webhooks/app/uninstalled"
+uri = "https://authorization-marketplace-elizabeth-western.trycloudflare.com/webhooks/app/uninstalled"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -30,10 +30,12 @@ optional_scopes = []
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = ["https://retired-hockey-move-pairs.trycloudflare.com/api/auth"]
+redirect_urls = [
+    "https://authorization-marketplace-elizabeth-western.trycloudflare.com/api/auth",
+]
 
 [app_proxy]
-url = "https://retired-hockey-move-pairs.trycloudflare.com/apps/save-collection"
+url = "https://authorization-marketplace-elizabeth-western.trycloudflare.com/apps/save-collection"
 subpath = "save-collection"
 prefix = "apps"
 

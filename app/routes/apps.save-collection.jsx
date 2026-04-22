@@ -70,13 +70,13 @@ export const action = async ({ request }) => {
       },
       update: {
         collectionTitle: collectionTitle || "Unknown",
-        products: selectedProducts || [], // 👈 NEW
+        products: selectedProducts || [],
       },
       create: {
         customerId: customer.id,
         collectionId: collection,
         collectionTitle: collectionTitle || "Unknown",
-        products: selectedProducts || [], // 👈 NEW
+        products: selectedProducts || [],
       },
     });
 
